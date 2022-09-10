@@ -76,7 +76,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         
 
         Vector2 axisInput = playerInput.actions["Move"].ReadValue<Vector2>();
-        data.direction = new Vector3(axisInput.x, 0, axisInput.y);
+        data.direction = axisInput;
 
         if(_shoot)
         {

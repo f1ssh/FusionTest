@@ -7,7 +7,9 @@ public class Player : NetworkBehaviour
 {
     [SerializeField] private Ball _prefabBall;
     [SerializeField] private PhysxBall _prefabPhysxBall;
-
+    [SerializeField] private float movementSpeed = 5;
+    private Vector3 velocity = Vector3.zero;
+    [SerializeField] private float cameraSpeed = 10f;
 
     private Text _messages;
 
@@ -27,7 +29,7 @@ public class Player : NetworkBehaviour
 
     [Networked] private TickTimer delay { get; set; }
 
-    private NetworkCharacterControllerPrototype _cc;
+    private Rigidbody2D _rb;
     private Vector3 _forward;
 
     public static void OnBallSpawned(Changed<Player> changed)
@@ -42,7 +44,7 @@ public class Player : NetworkBehaviour
 
     private void Awake()
     {
-        _cc = GetComponent<NetworkCharacterControllerPrototype>();
+        _rb = GetComponent<Rigidbody2D>();
         _forward = transform.forward;
 
         Debug.Log(GetComponent<NetworkObject>().HasInputAuthority);
@@ -82,13 +84,18 @@ public class Player : NetworkBehaviour
         {
 
             data.direction.Normalize();
-            _cc.Move(5 * data.direction * Runner.DeltaTime);
+            //_cc.Move(5 * data.direction * Runner.DeltaTime);
+            //_rb.MovePosition(5 * data.direction * Runner.DeltaTime);
+            _rb.velocity = movementSpeed * data.direction;
+            //Debug.Log($"{_rb.velocity.x}, {_rb.velocity.y}");
 
             //if (data.direction.sqrMagnitude > 0)
-                //_forward = data.direction;
-               
+            //_forward = data.direction;
+
             if (GetComponent<NetworkObject>().HasInputAuthority)
-                Camera.main.transform.position = new Vector3(gameObject.transform.position.x, Camera.main.transform.position.y, gameObject.transform.position.z);
+                Camera.main.transform.position = Vector3.SmoothDamp(Camera.main.transform.position, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, Camera.main.transform.position.z), ref velocity, 1/cameraSpeed);
+
+                //Camera.main.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, Camera.main.transform.position.z);
 
             if (delay.ExpiredOrNotRunning(Runner))
             {
