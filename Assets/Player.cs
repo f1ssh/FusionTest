@@ -102,7 +102,7 @@ public class Player : NetworkBehaviour
                 if (data.shoot) // (data.buttons & NetworkInputData.MOUSEBUTTON1) != 0
                 {
                     Vector3 heading = data.bulletDirection - transform.position;
-                    heading = new Vector3(heading.x, 0, heading.z);
+                    heading = new Vector3(heading.x, heading.y, 0);
                     float distance = heading.magnitude;
                     _forward = heading / distance;
                     delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
@@ -113,19 +113,6 @@ public class Player : NetworkBehaviour
                         // Initialize the Ball before synchronizing it
                         o.GetComponent<Ball>().Init();
                     });
-                    spawned = !spawned;
-                }
-                else if ((data.buttons & NetworkInputData.MOUSEBUTTON2) != 0)
-                {
-                    delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
-                    Runner.Spawn(_prefabPhysxBall,
-                        transform.position + _forward,
-                        Quaternion.LookRotation(_forward),
-                        Object.InputAuthority,
-                        (runner, o) =>
-                        {
-                            o.GetComponent<PhysxBall>().Init(10 * _forward);
-                        });
                     spawned = !spawned;
                 }
             }

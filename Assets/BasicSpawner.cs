@@ -139,7 +139,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
             Vector2 screenPos = touch.screenPosition;
 
-            _bulletDirection = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Camera.main.transform.position.y));
+            _bulletDirection = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, -Camera.main.transform.position.z));
             //Debug.Log($"{_bulletDirection.x},{_bulletDirection.y},{_bulletDirection.z}");            
             _shoot = true;
             break;
