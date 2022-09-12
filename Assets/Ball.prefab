@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  movementSpeed: 5
+  movementSpeed: 10
   maxBounces: 3
 --- !u!58 &7561638904784298348
 CircleCollider2D:
